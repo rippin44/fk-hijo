@@ -1,5 +1,5 @@
 // FK非常用の計算機：一度開けば、ネットがなくても開けるように保存しておく
-var VER="fk-emg-v276";
+var VER="fk-emg-v276-11010205";
 var CORE=["./","index.html","manifest.webmanifest","icon-192.png","icon-512.png","apple-touch-icon.png"];
 self.addEventListener("install",function(e){ e.waitUntil(caches.open(VER).then(function(c){ return c.addAll(CORE); }).then(function(){ return self.skipWaiting(); })); });
 self.addEventListener("activate",function(e){ e.waitUntil(caches.keys().then(function(ks){ return Promise.all(ks.filter(function(k){ return k!==VER && k.indexOf("fk-emg-")===0; }).map(function(k){ return caches.delete(k); })); }).then(function(){ return self.clients.claim(); })); });

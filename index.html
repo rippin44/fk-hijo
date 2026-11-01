@@ -4021,12 +4021,16 @@ document.addEventListener("click",function(e){ var b=e.target.closest&&e.target.
     var k=n();
     b.innerHTML='非常用の計算機<span style="font-size:15px;font-weight:700">（ネットが切れて本体が開けない時だけ使う）</span>　'+
       '<span style="background:#fff;color:#1D4ED8;border-radius:6px;padding:0 8px">この画面の記録 '+k+'件</span>'+
+      (k?' <button id="emgCp" style="font-size:15px;font-weight:700;padding:2px 10px;border-radius:6px;border:2px solid #fff;background:#FDE047;color:#111">本体に戻すためコピー</button>':'')+
       (k?' <button id="emgClr" style="font-size:15px;font-weight:700;padding:2px 10px;border-radius:6px;border:2px solid #fff;background:'+(arm?'#B3261E':'transparent')+';color:#fff">'+(arm?'もう一度押すと消します':'本体に戻し終わった')+'</button>':'');
+    var cp=document.getElementById("emgCp");
+    if(cp) cp.onclick=function(ev){ ev.stopPropagation(); var t=""; try{ t="FKQ1|"+(localStorage.getItem("fk_pending")||"[]"); }catch(e){}
+      try{ navigator.clipboard.writeText(t).then(function(){ cp.textContent="コピーしました（本体で「控えを戻す」）"; },function(){ cp.textContent="コピーできませんでした。もう一度"; }); }catch(e){ cp.textContent="コピーできませんでした"; } };
     var c=document.getElementById("emgClr");
     if(c) c.onclick=function(ev){ ev.stopPropagation(); if(!arm){ arm=true; draw(); setTimeout(function(){ arm=false; draw(); },5000); return; }
       try{ localStorage.setItem("fk_pending","[]"); }catch(e){} try{ if(window.__idbSet) window.__idbSet("fk_pending",[]); }catch(e){} arm=false; location.reload(); };
   }
-  draw(); setInterval(draw,3000);
+  var last=-1; draw(); setInterval(function(){ var k=n(); if(k!==last){ last=k; draw(); } },2000);
 })();
 </script>
 </body>
